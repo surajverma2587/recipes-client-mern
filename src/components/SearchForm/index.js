@@ -3,6 +3,7 @@ import axios from "axios";
 
 const SearchForm = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
 
@@ -14,7 +15,7 @@ const SearchForm = () => {
 
     try {
       const { data } = await axios.get(url);
-      console.log(data);
+      setRecipes(data);
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -46,6 +47,29 @@ const SearchForm = () => {
       {!loading && !error ? (
         <div>
           <h1>Results</h1>
+          {recipes.map((recipe, index) => {
+            return (
+              <div class="card" style={{ width: "18rem" }} key={index}>
+                <img
+                  src={recipe.thumbnail}
+                  class="card-img-top"
+                  alt={recipe.title}
+                />
+                <div class="card-body">
+                  <h5 class="card-title">{recipe.title}</h5>
+                  <p class="card-text">{recipe.ingredients.join(" | ")}</p>
+                  <a
+                    href={recipe.href}
+                    class="btn btn-primary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Go to recipe
+                  </a>
+                </div>
+              </div>
+            );
+          })}
         </div>
       ) : null}
     </div>
